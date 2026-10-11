@@ -36,7 +36,7 @@ public class ChatUnreadCell extends FrameLayout {
         backgroundLayout = new FrameLayout(context);
         backgroundLayout.setBackgroundResource(R.drawable.newmsg_divider);
         backgroundLayout.getBackground().setColorFilter(new PorterDuffColorFilter(getColor(Theme.key_chat_unreadMessagesStartBackground), PorterDuff.Mode.MULTIPLY));
-        addView(backgroundLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 27, Gravity.LEFT | Gravity.TOP, 0, 7, 0, 0));
+        addView(backgroundLayout, LayoutHelper.createFrame(LayoutHelper.MATCH_PARENT, 25, Gravity.LEFT | Gravity.TOP, 0, 6, 0, 0));
 
         imageView = new ImageView(context);
         imageView.setImageResource(R.drawable.ic_ab_new);
@@ -46,9 +46,8 @@ public class ChatUnreadCell extends FrameLayout {
 
         textView = new TextView(context);
         textView.setPadding(0, 0, 0, AndroidUtilities.dp(1));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 14);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_DIP, 13);
         textView.setTextColor(getColor(Theme.key_chat_unreadMessagesStartText));
-        textView.setTypeface(AndroidUtilities.bold());
         addView(textView, LayoutHelper.createFrame(LayoutHelper.WRAP_CONTENT, LayoutHelper.WRAP_CONTENT, Gravity.CENTER, 32, 0, 32, 0));
     }
 
@@ -70,7 +69,7 @@ public class ChatUnreadCell extends FrameLayout {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(40), MeasureSpec.EXACTLY));
+        super.onMeasure(MeasureSpec.makeMeasureSpec(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.EXACTLY), MeasureSpec.makeMeasureSpec(AndroidUtilities.dp(36), MeasureSpec.EXACTLY));
     }
 
     private int getColor(int key) {
