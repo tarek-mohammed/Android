@@ -10997,13 +10997,8 @@ public class ChatMessageCell extends BaseCell implements SeekBar.SeekBarDelegate
 
             if (canChangeRadius) {
                 int tl, tr, bl, br;
-                int minRad = dp(4);
-                int rad;
-                if (SharedConfig.bubbleRadius > 2) {
-                    rad = dp(SharedConfig.bubbleRadius - 2);
-                } else {
-                    rad = dp(SharedConfig.bubbleRadius);
-                }
+                int minRad = dp(5);
+                int rad = dp(SharedConfig.bubbleRadius);
                 int nearRad = Math.min(dp(3), rad);
                 tl = tr = bl = br = rad;
                 if (minRad > tl) {

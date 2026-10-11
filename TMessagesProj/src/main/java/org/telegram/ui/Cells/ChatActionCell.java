@@ -3470,6 +3470,15 @@ public class ChatActionCell extends BaseCell implements DownloadController.FileD
             }
             backgroundPath.close();
 
+            if (currentMessageObject != null && currentMessageObject.isDateObject) {
+                float pillWidth = textWidth + dp(12);
+                float pillHeight = dp(22);
+                rect.set((getMeasuredWidth() - pillWidth) / 2.0f, dp(4), (getMeasuredWidth() + pillWidth) / 2.0f, dp(4) + pillHeight);
+                backgroundPath.reset();
+                backgroundPath.addRoundRect(rect, pillHeight / 2.0f, pillHeight / 2.0f, Path.Direction.CW);
+                backgroundPath.close();
+            }
+
             if (isMessageActionSuggestedPostApproval() && !isNewStyleButtonLayout()) {
                 rect.left = x - textWidth / 2f - dp(17);
                 rect.top = y;
