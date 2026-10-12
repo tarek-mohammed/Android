@@ -2220,8 +2220,9 @@ public class ActionBar extends FrameLayout implements FactorAnimator.Target, The
 
     @Override
     protected void dispatchDraw(Canvas canvas) {
-        final int p = dp(6);
-        final int s = dp(46);
+        final boolean compactChatGlass = chatAvatarContainer != null && glassDrawable != null;
+        final int p = dp(compactChatGlass ? 4 : 6);
+        final int s = dp(compactChatGlass ? 40 : 46);
 
         final float actionModeFactor = getActionModeFactor();
         final int menuWidthA = hasForcedMenuWidth ? forcedMenuWidth : (int) animatorMenuItemsWidth.getFactor();
