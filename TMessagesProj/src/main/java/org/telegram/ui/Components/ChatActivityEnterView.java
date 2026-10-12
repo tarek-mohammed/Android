@@ -31,6 +31,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,6 +48,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.graphics.drawable.RippleDrawable;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -2836,7 +2839,7 @@ public class ChatActivityEnterView extends FrameLayout implements
             attachButton.setScaleType(ImageView.ScaleType.CENTER);
             attachButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.MULTIPLY));
             attachButton.setImageResource(R.drawable.msg_input_attach2);
-            attachButton.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
+            attachButton.setBackground(createChatActionButtonBackground());
             messageEditTextContainer.addView(attachButton, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT, Gravity.BOTTOM | Gravity.RIGHT));
             attachButton.setOnClickListener(v -> {
                 if (adjustPanLayoutHelper != null && adjustPanLayoutHelper.animationInProgress() || attachLayoutPaddingAlpha == 0f) {
@@ -3450,6 +3453,7 @@ public class ChatActivityEnterView extends FrameLayout implements
 //        audioVideoSendButton.setAccessibilityDelegate(mediaMessageButtonsDelegate);
         padding = dp(10f);
         audioVideoSendButton.setPadding(padding, padding, padding, padding);
+        audioVideoSendButton.setBackground(createChatActionButtonBackground());
         audioVideoButtonContainer.addView(audioVideoSendButton, LayoutHelper.createFrame(DEFAULT_HEIGHT, DEFAULT_HEIGHT));
 
         cancelBotButton = new ImageView(context);
@@ -5812,8 +5816,8 @@ public class ChatActivityEnterView extends FrameLayout implements
         messageEditText.setMaxLines(6);
         messageEditText.setTextSize(TypedValue.COMPLEX_UNIT_DIP, isChat ? 17 : 18);
         messageEditText.setGravity(Gravity.BOTTOM);
-        messageEditText.setPadding(0, dp(9), 0, dp(10));
-        messageEditText.setBackgroundDrawable(null);
+        messageEditText.setPadding(isChat ? dp(12) : 0, dp(9), isChat ? dp(12) : 0, dp(10));
+        messageEditText.setBackgroundDrawable(createMessageInputPillBackground());
         messageEditText.setTextColor(getThemedColor(Theme.key_chat_messagePanelText));
         messageEditText.setLinkTextColor(getThemedColor(Theme.key_chat_messageLinkOut));
         messageEditText.setHighlightColor(getThemedColor(Theme.key_chat_inTextSelectionHighlight));
@@ -10369,6 +10373,36 @@ public class ChatActivityEnterView extends FrameLayout implements
         return trendingStickersAlert;
     }
 
+    private Drawable createMessageInputPillBackground() {
+        if (!isChat) {
+            return null;
+        }
+        int surfaceColor = getThemedColor(Theme.key_chat_messagePanelBackground);
+        int iconColor = getThemedColor(Theme.key_glass_defaultIcon);
+        GradientDrawable background = new GradientDrawable();
+        background.setShape(GradientDrawable.RECTANGLE);
+        background.setColor(ColorUtils.setAlphaComponent(surfaceColor, Math.min(0x72, Color.alpha(surfaceColor))));
+        background.setCornerRadius(dp(22));
+        background.setStroke(dp(1), ColorUtils.setAlphaComponent(iconColor, Math.min(0x3D, Color.alpha(iconColor))));
+        return background;
+    }
+
+    private Drawable createChatActionButtonBackground() {
+        if (!isChat) {
+            return Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector), Theme.RIPPLE_MASK_CIRCLE_20DP, dp(20));
+        }
+        int surfaceColor = getThemedColor(Theme.key_chat_messagePanelBackground);
+        int iconColor = getThemedColor(Theme.key_glass_defaultIcon);
+        GradientDrawable surface = new GradientDrawable();
+        surface.setShape(GradientDrawable.OVAL);
+        surface.setColor(ColorUtils.setAlphaComponent(surfaceColor, Math.min(0x72, Color.alpha(surfaceColor))));
+        surface.setStroke(dp(1), ColorUtils.setAlphaComponent(iconColor, Math.min(0x3D, Color.alpha(iconColor))));
+        GradientDrawable mask = new GradientDrawable();
+        mask.setShape(GradientDrawable.OVAL);
+        mask.setColor(Color.WHITE);
+        return new RippleDrawable(ColorStateList.valueOf(getThemedColor(Theme.key_listSelector)), surface, mask);
+    }
+
     @Override
     public void updateColors() {
         if (messageSendPreview != null) {
@@ -10413,6 +10447,13 @@ public class ChatActivityEnterView extends FrameLayout implements
         audioVideoSendButton.setColorFilter(new PorterDuffColorFilter(audioVideoButtonContainerForbidden ? getThemedColor(Theme.key_glass_defaultIcon) : Color.WHITE, PorterDuff.Mode.SRC_IN));
         emojiButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
         emojiButton.setBackground(Theme.createSelectorDrawable(getThemedColor(Theme.key_listSelector)));
+        if (messageEditText != null) {
+            messageEditText.setBackgroundDrawable(createMessageInputPillBackground());
+        }
+        if (attachButton != null) {
+            attachButton.setBackground(createChatActionButtonBackground());
+        }
+        audioVideoSendButton.setBackground(createChatActionButtonBackground());
         deleteRichDraftButton.setColorFilter(new PorterDuffColorFilter(getThemedColor(Theme.key_glass_defaultIcon), PorterDuff.Mode.SRC_IN));
         deleteRichDraftButton.setBackground(Theme.createInsetRoundRectDrawable(getThemedColor(Theme.key_listSelector), dp(19), dp(1), dp(3)));
         sendOutlineView.setColorFilter(getThemedColor(Theme.key_telegram_color), PorterDuff.Mode.SRC_IN);
